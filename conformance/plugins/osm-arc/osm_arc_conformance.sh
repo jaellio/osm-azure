@@ -76,7 +76,7 @@ saveResults() {
         if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
           eval "gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v $ginkgo_focus_statements -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1"
         else
-          eval "gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v $ginkgo_focus_statements -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1"
+          eval "gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v $ginkgo_focus_statements -test.timeout 60m -cleanupTest=false -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1"
         fi
 
         sleep 120
@@ -212,7 +212,7 @@ if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
 elif [[ "$KUBERNETES_DISTRIBUTION" == "RKE" ]]; then
   gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -ginkgo.skip="\bTCP server-first traffic\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 else
-  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
+  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -cleanupTest=false -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 fi
 
 sleep 120
